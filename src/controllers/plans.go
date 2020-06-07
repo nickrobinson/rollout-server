@@ -15,6 +15,7 @@ type CreatePlanInput struct {
 	StartTime *time.Time `json:start_dt`
 	EndTime   *time.Time `json:end_dt binding: "gtfield=StartTime"`
 	Overview  string     `json:"overview" binding: "max=1024"`
+	Status    string     `json:status`
 }
 
 type UpdatePlanInput struct {
@@ -24,6 +25,7 @@ type UpdatePlanInput struct {
 	StartTime *time.Time `json:start_dt`
 	EndTime   *time.Time `json:end_dt binding: "gtfield=StartTime"`
 	Overview  string     `json:"overview" binding: "max=1024"`
+	Status    string     `json:status`
 }
 
 // GET /plans
@@ -66,7 +68,7 @@ func FindPlan(c *gin.Context) { // Get model if exist
 	c.JSON(http.StatusOK, gin.H{"plans": plan})
 }
 
-// PATCH /plans/:id
+// PUT /plans/:id
 // Update a plan
 func UpdatePlan(c *gin.Context) {
 	// Get model if exist

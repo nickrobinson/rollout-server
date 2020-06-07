@@ -16,7 +16,7 @@ func main() {
 	r.GET("/plans", controllers.FindPlans)
 	r.POST("/plans", controllers.CreatePlan)
 	r.GET("/plans/:id", controllers.FindPlan)
-	r.PATCH("/plans/:id", controllers.UpdatePlan)
+	r.PUT("/plans/:id", controllers.UpdatePlan)
 	r.DELETE("/plans/:id", controllers.DeletePlan)
 
 	// Run the server
