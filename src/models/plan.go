@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jinzhu/gorm"
+)
 
 type PlanStatusType string
 
@@ -15,7 +20,7 @@ const (
 
 // Plan model
 type Plan struct {
-	ID        uint           `json:"id" gorm:"primary_key`
+	ID        uuid.UUID      `json:"id" gorm:"type:uuid;primary_key`
 	Title     string         `json:"title"`
 	Author    string         `json:"author"`
 	StartTime *time.Time     `json:"start_dt"`
@@ -23,4 +28,9 @@ type Plan struct {
 	Operator  string         `json:"operator"`
 	Status    PlanStatusType `json:"status"`
 	Overview  string         `json:"overview" gorm:"default:''"`
+}
+
+func (plan *Plan) BeforeCreate(scope *gorm.Scope) error {
+	scope.SetColumn("ID", uuid.New().String())
+	return nil
 }
