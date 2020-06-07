@@ -32,7 +32,7 @@ func FindPlans(c *gin.Context) {
 	var plans []models.Plan
 	models.DB.Find(&plans)
 
-	c.JSON(http.StatusOK, gin.H{"data": plans})
+	c.JSON(http.StatusOK, gin.H{"plans": plans})
 }
 
 // POST /plans
@@ -50,7 +50,7 @@ func CreatePlan(c *gin.Context) {
 	plan.Status = "DRAFT"
 	models.DB.Create(&plan)
 
-	c.JSON(http.StatusOK, gin.H{"data": plan})
+	c.JSON(http.StatusOK, gin.H{"plans": plan})
 }
 
 // GET /plans/:id
@@ -63,7 +63,7 @@ func FindPlan(c *gin.Context) { // Get model if exist
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": plan})
+	c.JSON(http.StatusOK, gin.H{"plans": plan})
 }
 
 // PATCH /plans/:id
@@ -85,7 +85,7 @@ func UpdatePlan(c *gin.Context) {
 
 	models.DB.Model(&plan).Updates(input)
 
-	c.JSON(http.StatusOK, gin.H{"data": plan})
+	c.JSON(http.StatusOK, gin.H{"plans": plan})
 }
 
 // DELETE /plans/:id
@@ -100,5 +100,5 @@ func DeletePlan(c *gin.Context) {
 
 	models.DB.Delete(&plan)
 
-	c.JSON(http.StatusOK, gin.H{"data": true})
+	c.JSON(http.StatusOK, gin.H{"plans": true})
 }
