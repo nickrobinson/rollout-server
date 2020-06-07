@@ -9,6 +9,14 @@ import (
 )
 
 type CreatePlanInput struct {
+	Plan CreatePlanBody `json:"plan"`
+}
+
+type UpdatePlanInput struct {
+	Plan UpdatePlanBody `json:"plan"`
+}
+
+type CreatePlanBody struct {
 	Title     string     `json:"title" binding:"required"`
 	Author    string     `json:"author" binding:"required"`
 	Operator  string     `json:"operator" binding:"required"`
@@ -18,7 +26,7 @@ type CreatePlanInput struct {
 	Status    string     `json:status`
 }
 
-type UpdatePlanInput struct {
+type UpdatePlanBody struct {
 	Title     string     `json:"title"`
 	Author    string     `json:"author"`
 	Operator  string     `json:"operator"`
@@ -48,7 +56,7 @@ func CreatePlan(c *gin.Context) {
 	}
 
 	// CreatePlan
-	plan := models.Plan{Title: input.Title, Author: input.Author, Operator: input.Operator, Overview: input.Overview}
+	plan := models.Plan{Title: input.Plan.Title, Author: input.Plan.Author, Operator: input.Plan.Operator, Overview: input.Plan.Overview}
 	plan.Status = "DRAFT"
 	models.DB.Create(&plan)
 
@@ -85,7 +93,9 @@ func UpdatePlan(c *gin.Context) {
 		return
 	}
 
-	models.DB.Model(&plan).Updates(input)
+	print(input.Plan.Overview)
+
+	models.DB.Model(&plan).Updates(input.Plan)
 
 	c.JSON(http.StatusOK, gin.H{"plans": plan})
 }
