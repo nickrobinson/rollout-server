@@ -2,38 +2,17 @@ package controllers
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nickrobinson/rollout-server/src/models"
 )
 
 type CreatePlanInput struct {
-	Plan CreatePlanBody `json:"plan"`
+	Plan models.Plan `json:"plan"`
 }
 
 type UpdatePlanInput struct {
-	Plan UpdatePlanBody `json:"plan"`
-}
-
-type CreatePlanBody struct {
-	Title     string     `json:"title" binding:"required"`
-	Author    string     `json:"author" binding:"required"`
-	Operator  string     `json:"operator" binding:"required"`
-	StartTime *time.Time `json:start_dt`
-	EndTime   *time.Time `json:end_dt binding: "gtfield=StartTime"`
-	Overview  string     `json:"overview" binding: "max=1024"`
-	Status    string     `json:status`
-}
-
-type UpdatePlanBody struct {
-	Title     string     `json:"title"`
-	Author    string     `json:"author"`
-	Operator  string     `json:"operator"`
-	StartTime *time.Time `json:start_dt`
-	EndTime   *time.Time `json:end_dt binding: "gtfield=StartTime"`
-	Overview  string     `json:"overview" binding: "max=1024"`
-	Status    string     `json:status`
+	Plan models.Plan `json:"plan"`
 }
 
 // GET /plans
@@ -56,8 +35,9 @@ func CreatePlan(c *gin.Context) {
 	}
 
 	// CreatePlan
-	plan := models.Plan{Title: input.Plan.Title, Author: input.Plan.Author, Operator: input.Plan.Operator, Overview: input.Plan.Overview}
+	plan := models.Plan{Title: input.Plan.Title, Author: input.Plan.Author, Operator: input.Plan.Operator, Overview: input.Plan.Overview, RollbackPlan: input.Plan.RollbackPlan}
 	plan.Status = "DRAFT"
+	print(plan.RollbackPlan)
 	models.DB.Create(&plan)
 
 	c.JSON(http.StatusOK, gin.H{"plans": plan})
@@ -92,8 +72,6 @@ func UpdatePlan(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	print(input.Plan.Overview)
 
 	models.DB.Model(&plan).Updates(input.Plan)
 

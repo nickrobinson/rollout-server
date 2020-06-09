@@ -20,14 +20,15 @@ const (
 
 // Plan model
 type Plan struct {
-	ID        uuid.UUID      `json:"id" gorm:"type:uuid;primary_key`
-	Title     string         `json:"title"`
-	Author    string         `json:"author"`
-	StartTime *time.Time     `json:"start_dt"`
-	EndTime   *time.Time     `json:"end_dt"`
-	Operator  string         `json:"operator"`
-	Status    PlanStatusType `json:"status"`
-	Overview  string         `json:"overview" gorm:"default:''"`
+	ID           uuid.UUID      `json:"id" gorm:"type:uuid;primary_key`
+	Title        string         `json:"title"`
+	Author       string         `json:"author"`
+	StartTime    *time.Time     `json:"start"`
+	EndTime      *time.Time     `json:"end"`
+	Operator     string         `json:"operator"`
+	Status       PlanStatusType `json:"status"`
+	Overview     string         `json:"overview" gorm:"default:''"`
+	RollbackPlan string         `json:"rollbackPlan" gorm:"default:''"`
 }
 
 func (plan *Plan) BeforeCreate(scope *gorm.Scope) error {
