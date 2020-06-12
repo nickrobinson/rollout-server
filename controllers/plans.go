@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nickrobinson/rollout-server/src/models"
+	"github.com/nickrobinson/rollout-server/models"
 )
 
 type CreatePlanInput struct {
