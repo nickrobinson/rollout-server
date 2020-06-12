@@ -1,13 +1,14 @@
 package main
 
 import (
-	"os"
+	"fmt"
 	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/nickrobinson/rollout-server/controllers"
 	"github.com/nickrobinson/rollout-server/models"
+	viper "github.com/spf13/viper"
 )
 
 var identityKey = "id"
@@ -20,11 +21,18 @@ type User struct {
 func main() {
 	r := gin.Default()
 
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("fatal error config file: %s", err))
+	}
+
 	// the jwt middleware
 	authMiddleware, _ := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:            "rollout",
 		SigningAlgorithm: "HS256",
-		Key:              []byte(os.Getenv("AUTH_SECRET")),
+		Key:              []byte(viper.GetString("server.jwtSecretKey")),
 		Timeout:          time.Hour,
 		MaxRefresh:       time.Hour,
 		IdentityKey:      identityKey,

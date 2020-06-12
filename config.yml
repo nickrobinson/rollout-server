@@ -1,0 +1,2 @@
+server:
+  jwtSecretKey: 'YOUR_JWT_SECRET'
