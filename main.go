@@ -10,20 +10,6 @@ import (
 	"github.com/nickrobinson/rollout-server/models"
 )
 
-var identityKey = "id"
-
-type login struct {
-	Username string `form:"username" json:"username" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required"`
-}
-
-// User demo
-type User struct {
-	UserName  string
-	FirstName string
-	LastName  string
-}
-
 func main() {
 	r := gin.Default()
 
