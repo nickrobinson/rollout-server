@@ -10,12 +10,19 @@ import (
 	"github.com/nickrobinson/rollout-server/models"
 )
 
+var identityKey = "id"
+
+// User demo
+type User struct {
+	UserName string
+}
+
 func main() {
 	r := gin.Default()
 
 	// the jwt middleware
 	authMiddleware, _ := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:            "test zone",
+		Realm:            "rollout",
 		SigningAlgorithm: "HS256",
 		Key:              []byte(os.Getenv("AUTH_SECRET")),
 		Timeout:          time.Hour,
@@ -25,9 +32,7 @@ func main() {
 			return jwt.MapClaims{}
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
-			return &User{
-				UserName: "nick",
-			}
+			return &User{}
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			return true
