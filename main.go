@@ -84,6 +84,9 @@ func main() {
 	r.PUT("/plans/:id", controllers.UpdatePlan)
 	r.DELETE("/plans/:id", controllers.DeletePlan)
 
+	r.GET("planComments", controllers.FindPlanComments)
+	r.POST("/planComments", controllers.CreatePlanComment)
+
 	// Run the server
 	r.Run()
 }

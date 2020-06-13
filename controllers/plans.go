@@ -19,7 +19,7 @@ type UpdatePlanInput struct {
 // Get all plans
 func FindPlans(c *gin.Context) {
 	var plans []models.Plan
-	models.DB.Find(&plans)
+	models.DB.Preload("PlanComments").Find(&plans)
 
 	c.JSON(http.StatusOK, gin.H{"plans": plans})
 }

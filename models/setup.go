@@ -15,6 +15,7 @@ func ConnectDatabase() {
 	}
 
 	database.AutoMigrate(&Plan{})
+	database.AutoMigrate(&PlanComment{})
 
 	DB = database
 }
