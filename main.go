@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strings"
 	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -21,18 +23,25 @@ type User struct {
 func main() {
 	r := gin.Default()
 
-	viper.SetConfigName("config")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("fatal error config file: %s", err))
+	// Setup static config
+	viper.SetConfigName("default.yml")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("./config")
+	viper.ReadInConfig()
+
+	env := "dev"
+	if envVar := os.Getenv("ENV"); envVar != "" {
+		env = strings.ToLower(envVar)
 	}
+
+	viper.SetConfigName(fmt.Sprintf("%s.yml", env))
+	viper.MergeInConfig()
 
 	// the jwt middleware
 	authMiddleware, _ := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:            "rollout",
 		SigningAlgorithm: "HS256",
-		Key:              []byte(viper.GetString("server.jwtSecretKey")),
+		Key:              []byte(viper.GetString("development.server.jwtSecretKey")),
 		Timeout:          time.Hour,
 		MaxRefresh:       time.Hour,
 		IdentityKey:      identityKey,
@@ -61,7 +70,9 @@ func main() {
 		TimeFunc: time.Now,
 	})
 
-	r.Use(authMiddleware.MiddlewareFunc())
+	if viper.GetBool("app.server.disableAuth") == false {
+		r.Use(authMiddleware.MiddlewareFunc())
+	}
 
 	// Connect to database
 	models.ConnectDatabase()

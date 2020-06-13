@@ -1,0 +1,4 @@
+app:
+  server:
+   jwtSecretKey: 'YOUR_SECRET_KEY'
+   disableAuth: false
