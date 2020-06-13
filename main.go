@@ -41,7 +41,7 @@ func main() {
 	authMiddleware, _ := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:            "rollout",
 		SigningAlgorithm: "HS256",
-		Key:              []byte(viper.GetString("development.server.jwtSecretKey")),
+		Key:              []byte(viper.GetString("app.server.jwtSecretKey")),
 		Timeout:          time.Hour,
 		MaxRefresh:       time.Hour,
 		IdentityKey:      identityKey,
